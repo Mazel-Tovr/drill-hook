@@ -1,0 +1,15 @@
+name: Build & publish drill artifacts
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  build_and_publish_for_win:
+    name: Publish for Windows platform (Windows platform)
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v1
+      - name: Build
+        run: |
+          gradle -si jvmTest

@@ -1,0 +1,576 @@
+  page_size=4096
+  num_entries_in_page=56
+Leave funchook_create() => 0x108b1a000
+Enter funchook_prepare(0x108b1a000, 0x108a3cb90, 0x108a139b0)
+  Original Instructions:
+    00007fff71d25af8 (05) b805000002               MOV EAX, 0x2000005
+    00007fff71d25afd (03) 4989ca                   MOV R10, RCX
+    00007fff71d25b00 (02) 0f05                     SYSCALL
+    00007fff71d25b02 (02) 7308                     JAE 0x7fff71d25b0c
+      ip-relative 00000008, absolute address= 00007fff71d25b0c, offset=1, size=8
+    00007fff71d25b04 (03) 4889c7                   MOV RDI, RAX
+    00007fff71d25b07 (05) e9810b0000               JMP 0x7fff71d2668d
+      ip-relative 00000b81, absolute address= 00007fff71d2668d, offset=1, size=32
+    00007fff71d25b0c (01) c3                       RET
+  process map: 0000000108989000-0000000108a22000
+  process map: 0000000108a22000-0000000108a3b000
+  process map: 0000000108a3b000-0000000108a3d000
+  process map: 0000000108a3d000-0000000108ad4000
+  process map: 0000000108ad4000-0000000108ad6000
+  process map: 0000000108ad6000-0000000108aec000
+  process map: 0000000108aec000-0000000108aed000
+  process map: 0000000108aed000-0000000108af4000
+  process map: 0000000108af4000-0000000108afa000
+  process map: 0000000108afa000-0000000108afb000
+  process map: 0000000108afb000-0000000108afc000
+  process map: 0000000108afc000-0000000108afd000
+  process map: 0000000108afd000-0000000108b01000
+  process map: 0000000108b01000-0000000108b02000
+  process map: 0000000108b02000-0000000108b03000
+  process map: 0000000108b03000-0000000108b07000
+  process map: 0000000108b07000-0000000108b08000
+  process map: 0000000108b08000-0000000108b09000
+  process map: 0000000108b09000-0000000108b1a000
+  process map: 0000000108b1a000-0000000108b1b000
+  process map: 000000010a0c3000-000000010a154000
+  process map: 000000010a154000-000000010a159000
+  process map: 000000010a159000-000000010a15a000
+  process map: 000000010a15a000-000000010a18f000
+  process map: 000000010a18f000-000000010a1c7000
+  process map: 00007fb9e0400000-00007fb9e0500000
+  process map: 00007fb9e0500000-00007fb9e0600000
+  process map: 00007fb9e0800000-00007fb9e1000000
+  process map: 00007fb9e1000000-00007fb9e1800000
+  process map: 00007ffee3277000-00007ffee6a77000
+  process map: 00007ffee6a77000-00007ffee7277000
+  process map: 00007fff00000000-00007fff80000000
+  process map: 00007fff80000000-00007fff92800000
+  process map: 00007fff92800000-00007fff92a00000
+  process map: 00007fff92a00000-00007fff93200000
+  process map: 00007fff93200000-00007fff93400000
+  process map: 00007fff93400000-00007fff93600000
+  process map: 00007fff93600000-00007fff93800000
+  process map: 00007fff93800000-00007fff93a00000
+  process map: 00007fff93a00000-00007fff94c00000
+  process map: 00007fff94c00000-00007fff94e00000
+  process map: 00007fff94e00000-00007fff98400000
+  process map: 00007fff98400000-00007fff98600000
+  process map: 00007fff98600000-00007fff9b400000
+  process map: 00007fff9b400000-00007fff9b600000
+  process map: 00007fff9b600000-00007fff9b800000
+  process map: 00007fff9b800000-00007fff9ba00000
+  process map: 00007fff9ba00000-00007fff9bc00000
+  process map: 00007fff9bc00000-00007fff9be00000
+  process map: 00007fff9be00000-00007fff9c000000
+  process map: 00007fff9c000000-00007fffc0000000
+  process map: 00007fffc0000000-00007fffffe00000
+  process map: 00007fffffe00000-00007fffffe01000
+  process map: 00007fffffe87000-00007fffffe88000
+  -- Use address 0x7ffefffff000 or (nil) for function 0x7fff71d25af8
+  allocate page 0x7ffefffff000 (size=4096)
+  Write jump32 0x00007fff71d25af8 -> 0x00007ffefffff043
+  Write jump64 0x00007ffefffff043 -> 0x0000000108a139b0
+  Trampoline Instructions:
+    00007ffefffff020 (05) b805000002               MOV EAX, 0x2000005
+    00007ffefffff025 (05) e9d36ad271               JMP 0x7fff71d25afd
+Leave funchook_prepare(..., [0x7fff71d25af8->0x7ffefffff020],...) => 0
+Enter funchook_prepare(0x108b1a000, 0x108a3cb98, 0x108a13a00)
+  Original Instructions:
+    00007fff71c6d138 (01) 55                       PUSH RBP
+    00007fff71c6d139 (03) 4889e5                   MOV RBP, RSP
+    00007fff71c6d13c (02) 4157                     PUSH R15
+    00007fff71c6d13e (02) 4156                     PUSH R14
+    00007fff71c6d140 (01) 53                       PUSH RBX
+    00007fff71c6d141 (01) 50                       PUSH RAX
+    00007fff71c6d142 (03) 4889f0                   MOV RAX, RSI
+    00007fff71c6d145 (03) 4989ff                   MOV R15, RDI
+    00007fff71c6d148 (04) 488d75e4                 LEA RSI, [RBP-0x1c]
+    00007fff71c6d14c (03) 4889c7                   MOV RDI, RAX
+    00007fff71c6d14f (05) e84affffff               CALL 0x7fff71c6d09e
+      ip-relative ffffff4a, absolute address= 00007fff71c6d09e, offset=1, size=32
+    00007fff71c6d154 (02) 85c0                     TEST EAX, EAX
+    00007fff71c6d156 (02) 7454                     JZ 0x7fff71c6d1ac
+      ip-relative 00000054, absolute address= 00007fff71c6d1ac, offset=1, size=8
+    00007fff71c6d158 (03) 4189c6                   MOV R14D, EAX
+    00007fff71c6d15b (05) bf01000000               MOV EDI, 0x1
+    00007fff71c6d160 (05) e839faffff               CALL 0x7fff71c6cb9e
+      ip-relative fffffa39, absolute address= 00007fff71c6cb9e, offset=1, size=32
+    00007fff71c6d165 (03) 4885c0                   TEST RAX, RAX
+    00007fff71c6d168 (02) 7442                     JZ 0x7fff71c6d1ac
+      ip-relative 00000042, absolute address= 00007fff71c6d1ac, offset=1, size=8
+    00007fff71c6d16a (03) 4889c3                   MOV RBX, RAX
+    00007fff71c6d16d (03) 8b75e4                   MOV ESI, [RBP-0x1c]
+    00007fff71c6d170 (03) 4c89ff                   MOV RDI, R15
+    00007fff71c6d173 (05) bab6010000               MOV EDX, 0x1b6
+    00007fff71c6d178 (02) 31c0                     XOR EAX, EAX
+    00007fff71c6d17a (05) e8bb640400               CALL 0x7fff71cb363a
+      ip-relative 000464bb, absolute address= 00007fff71cb363a, offset=1, size=32
+    00007fff71c6d17f (02) 85c0                     TEST EAX, EAX
+    00007fff71c6d181 (02) 7821                     JS 0x7fff71c6d1a4
+      ip-relative 00000021, absolute address= 00007fff71c6d1a4, offset=1, size=8
+    00007fff71c6d183 (05) 3d00800000               CMP EAX, 0x8000
+    00007fff71c6d188 (02) 7c32                     JL 0x7fff71c6d1bc
+      ip-relative 00000032, absolute address= 00007fff71c6d1bc, offset=1, size=8
+    00007fff71c6d18a (06) 66c743100000             MOV WORD [RBX+0x10], 0x0
+    00007fff71c6d190 (02) 89c7                     MOV EDI, EAX
+    00007fff71c6d192 (05) e86f620400               CALL 0x7fff71cb3406
+      ip-relative 0004626f, absolute address= 00007fff71cb3406, offset=1, size=32
+    00007fff71c6d197 (05) e87e600400               CALL 0x7fff71cb321a
+      ip-relative 0004607e, absolute address= 00007fff71cb321a, offset=1, size=32
+    00007fff71c6d19c (06) c70018000000             MOV DWORD [RAX], 0x18
+    00007fff71c6d1a2 (02) eb08                     JMP 0x7fff71c6d1ac
+      ip-relative 00000008, absolute address= 00007fff71c6d1ac, offset=1, size=8
+    00007fff71c6d1a4 (03) 4889df                   MOV RDI, RBX
+    00007fff71c6d1a7 (05) e832feffff               CALL 0x7fff71c6cfde
+      ip-relative fffffe32, absolute address= 00007fff71c6cfde, offset=1, size=32
+    00007fff71c6d1ac (02) 31db                     XOR EBX, EBX
+    00007fff71c6d1ae (03) 4889d8                   MOV RAX, RBX
+    00007fff71c6d1b1 (04) 4883c408                 ADD RSP, 0x8
+    00007fff71c6d1b5 (01) 5b                       POP RBX
+    00007fff71c6d1b6 (02) 415e                     POP R14
+    00007fff71c6d1b8 (02) 415f                     POP R15
+    00007fff71c6d1ba (01) 5d                       POP RBP
+    00007fff71c6d1bb (01) c3                       RET
+  Write jump32 0x00007fff71c6d138 -> 0x00007ffefffff08b
+  Write jump64 0x00007ffefffff08b -> 0x0000000108a13a00
+  Trampoline Instructions:
+    00007ffefffff068 (01) 55                       PUSH RBP
+    00007ffefffff069 (03) 4889e5                   MOV RBP, RSP
+    00007ffefffff06c (02) 4157                     PUSH R15
+    00007ffefffff06e (05) e9cbe0c671               JMP 0x7fff71c6d13e
+Leave funchook_prepare(..., [0x7fff71c6d138->0x7ffefffff068],...) => 0
+Enter funchook_install(0x108b1a000, 0x0)
+  protect page 0x7ffefffff000 (size=4096)
+  unprotect memory 0x7fff71d25000 (size=4096, prot=read,write,exec) <- 0x7fff71d25af8 (size=5)
+  protect memory 0x7fff71d25000 (size=4096, prot=read,exec)
+  unprotect memory 0x7fff71c6d000 (size=4096, prot=read,write,exec) <- 0x7fff71c6d138 (size=5)
+  protect memory 0x7fff71c6d000 (size=4096, prot=read,exec)
+Leave funchook_install() => 0
+Enter funchook_uninstall(0x108b1a000, 0x0)
+  unprotect memory 0x7fff71d25000 (size=4096, prot=read,write,exec) <- 0x7fff71d25af8 (size=5)
+  protect memory 0x7fff71d25000 (size=4096, prot=read,exec)
+  unprotect memory 0x7fff71c6d000 (size=4096, prot=read,write,exec) <- 0x7fff71c6d138 (size=5)
+  protect memory 0x7fff71c6d000 (size=4096, prot=read,exec)
+  unprotect page 0x7ffefffff000 (size=4096)
+Enter funchook_destroy(0x108b1a000)
+ deallocate page 0x7ffefffff000 (size=4096)
+  page_size=4096
+  num_entries_in_page=56
+Leave funchook_create() => 0x10ba2f000
+Enter funchook_prepare(0x10ba2f000, 0x10b950bd0, 0x10b927910)
+  Original Instructions:
+    00007fff71d25af8 (05) b805000002               MOV EAX, 0x2000005
+    00007fff71d25afd (03) 4989ca                   MOV R10, RCX
+    00007fff71d25b00 (02) 0f05                     SYSCALL
+    00007fff71d25b02 (02) 7308                     JAE 0x7fff71d25b0c
+      ip-relative 00000008, absolute address= 00007fff71d25b0c, offset=1, size=8
+    00007fff71d25b04 (03) 4889c7                   MOV RDI, RAX
+    00007fff71d25b07 (05) e9810b0000               JMP 0x7fff71d2668d
+      ip-relative 00000b81, absolute address= 00007fff71d2668d, offset=1, size=32
+    00007fff71d25b0c (01) c3                       RET
+  process map: 000000010b89d000-000000010b936000
+  process map: 000000010b936000-000000010b94f000
+  process map: 000000010b94f000-000000010b951000
+  process map: 000000010b951000-000000010b9e9000
+  process map: 000000010b9e9000-000000010b9ff000
+  process map: 000000010b9ff000-000000010ba00000
+  process map: 000000010ba00000-000000010ba07000
+  process map: 000000010ba07000-000000010ba0d000
+  process map: 000000010ba0d000-000000010ba0f000
+  process map: 000000010ba0f000-000000010ba10000
+  process map: 000000010ba10000-000000010ba11000
+  process map: 000000010ba11000-000000010ba12000
+  process map: 000000010ba12000-000000010ba16000
+  process map: 000000010ba16000-000000010ba17000
+  process map: 000000010ba17000-000000010ba18000
+  process map: 000000010ba18000-000000010ba1c000
+  process map: 000000010ba1c000-000000010ba1d000
+  process map: 000000010ba1d000-000000010ba1e000
+  process map: 000000010ba1e000-000000010ba2f000
+  process map: 000000010ba2f000-000000010ba30000
+  process map: 0000000115bea000-0000000115c7b000
+  process map: 0000000115c7b000-0000000115c80000
+  process map: 0000000115c80000-0000000115c81000
+  process map: 0000000115c81000-0000000115cb6000
+  process map: 0000000115cb6000-0000000115cee000
+  process map: 00007f86bdc00000-00007f86bdd00000
+  process map: 00007f86be000000-00007f86be800000
+  process map: 00007ffee0363000-00007ffee3b63000
+  process map: 00007ffee3b63000-00007ffee4363000
+  process map: 00007fff00000000-00007fff80000000
+  process map: 00007fff80000000-00007fff92800000
+  process map: 00007fff92800000-00007fff92a00000
+  process map: 00007fff92a00000-00007fff93200000
+  process map: 00007fff93200000-00007fff93400000
+  process map: 00007fff93400000-00007fff93600000
+  process map: 00007fff93600000-00007fff93800000
+  process map: 00007fff93800000-00007fff93a00000
+  process map: 00007fff93a00000-00007fff94c00000
+  process map: 00007fff94c00000-00007fff94e00000
+  process map: 00007fff94e00000-00007fff98400000
+  process map: 00007fff98400000-00007fff98600000
+  process map: 00007fff98600000-00007fff9b400000
+  process map: 00007fff9b400000-00007fff9b600000
+  process map: 00007fff9b600000-00007fff9b800000
+  process map: 00007fff9b800000-00007fff9ba00000
+  process map: 00007fff9ba00000-00007fff9bc00000
+  process map: 00007fff9bc00000-00007fff9be00000
+  process map: 00007fff9be00000-00007fff9c000000
+  process map: 00007fff9c000000-00007fffc0000000
+  process map: 00007fffc0000000-00007fffffe00000
+  process map: 00007fffffe00000-00007fffffe01000
+  process map: 00007fffffe87000-00007fffffe88000
+  -- Use address 0x7ffefffff000 or (nil) for function 0x7fff71d25af8
+  allocate page 0x7ffefffff000 (size=4096)
+  Write jump32 0x00007fff71d25af8 -> 0x00007ffefffff043
+  Write jump64 0x00007ffefffff043 -> 0x000000010b927910
+  Trampoline Instructions:
+    00007ffefffff020 (05) b805000002               MOV EAX, 0x2000005
+    00007ffefffff025 (05) e9d36ad271               JMP 0x7fff71d25afd
+Leave funchook_prepare(..., [0x7fff71d25af8->0x7ffefffff020],...) => 0
+Enter funchook_prepare(0x10ba2f000, 0x10b950bd8, 0x10b8f2cd0)
+  Original Instructions:
+    00007fff71d25c74 (05) b803000002               MOV EAX, 0x2000003
+    00007fff71d25c79 (03) 4989ca                   MOV R10, RCX
+    00007fff71d25c7c (02) 0f05                     SYSCALL
+    00007fff71d25c7e (02) 7308                     JAE 0x7fff71d25c88
+      ip-relative 00000008, absolute address= 00007fff71d25c88, offset=1, size=8
+    00007fff71d25c80 (03) 4889c7                   MOV RDI, RAX
+    00007fff71d25c83 (05) e9050a0000               JMP 0x7fff71d2668d
+      ip-relative 00000a05, absolute address= 00007fff71d2668d, offset=1, size=32
+    00007fff71d25c88 (01) c3                       RET
+  Write jump32 0x00007fff71d25c74 -> 0x00007ffefffff08b
+  Write jump64 0x00007ffefffff08b -> 0x000000010b8f2cd0
+  Trampoline Instructions:
+    00007ffefffff068 (05) b803000002               MOV EAX, 0x2000003
+    00007ffefffff06d (05) e9076cd271               JMP 0x7fff71d25c79
+Leave funchook_prepare(..., [0x7fff71d25c74->0x7ffefffff068],...) => 0
+Enter funchook_prepare(0x10ba2f000, 0x10b950be0, 0x10b927960)
+  Original Instructions:
+    00007fff71c6d138 (01) 55                       PUSH RBP
+    00007fff71c6d139 (03) 4889e5                   MOV RBP, RSP
+    00007fff71c6d13c (02) 4157                     PUSH R15
+    00007fff71c6d13e (02) 4156                     PUSH R14
+    00007fff71c6d140 (01) 53                       PUSH RBX
+    00007fff71c6d141 (01) 50                       PUSH RAX
+    00007fff71c6d142 (03) 4889f0                   MOV RAX, RSI
+    00007fff71c6d145 (03) 4989ff                   MOV R15, RDI
+    00007fff71c6d148 (04) 488d75e4                 LEA RSI, [RBP-0x1c]
+    00007fff71c6d14c (03) 4889c7                   MOV RDI, RAX
+    00007fff71c6d14f (05) e84affffff               CALL 0x7fff71c6d09e
+      ip-relative ffffff4a, absolute address= 00007fff71c6d09e, offset=1, size=32
+    00007fff71c6d154 (02) 85c0                     TEST EAX, EAX
+    00007fff71c6d156 (02) 7454                     JZ 0x7fff71c6d1ac
+      ip-relative 00000054, absolute address= 00007fff71c6d1ac, offset=1, size=8
+    00007fff71c6d158 (03) 4189c6                   MOV R14D, EAX
+    00007fff71c6d15b (05) bf01000000               MOV EDI, 0x1
+    00007fff71c6d160 (05) e839faffff               CALL 0x7fff71c6cb9e
+      ip-relative fffffa39, absolute address= 00007fff71c6cb9e, offset=1, size=32
+    00007fff71c6d165 (03) 4885c0                   TEST RAX, RAX
+    00007fff71c6d168 (02) 7442                     JZ 0x7fff71c6d1ac
+      ip-relative 00000042, absolute address= 00007fff71c6d1ac, offset=1, size=8
+    00007fff71c6d16a (03) 4889c3                   MOV RBX, RAX
+    00007fff71c6d16d (03) 8b75e4                   MOV ESI, [RBP-0x1c]
+    00007fff71c6d170 (03) 4c89ff                   MOV RDI, R15
+    00007fff71c6d173 (05) bab6010000               MOV EDX, 0x1b6
+    00007fff71c6d178 (02) 31c0                     XOR EAX, EAX
+    00007fff71c6d17a (05) e8bb640400               CALL 0x7fff71cb363a
+      ip-relative 000464bb, absolute address= 00007fff71cb363a, offset=1, size=32
+    00007fff71c6d17f (02) 85c0                     TEST EAX, EAX
+    00007fff71c6d181 (02) 7821                     JS 0x7fff71c6d1a4
+      ip-relative 00000021, absolute address= 00007fff71c6d1a4, offset=1, size=8
+    00007fff71c6d183 (05) 3d00800000               CMP EAX, 0x8000
+    00007fff71c6d188 (02) 7c32                     JL 0x7fff71c6d1bc
+      ip-relative 00000032, absolute address= 00007fff71c6d1bc, offset=1, size=8
+    00007fff71c6d18a (06) 66c743100000             MOV WORD [RBX+0x10], 0x0
+    00007fff71c6d190 (02) 89c7                     MOV EDI, EAX
+    00007fff71c6d192 (05) e86f620400               CALL 0x7fff71cb3406
+      ip-relative 0004626f, absolute address= 00007fff71cb3406, offset=1, size=32
+    00007fff71c6d197 (05) e87e600400               CALL 0x7fff71cb321a
+      ip-relative 0004607e, absolute address= 00007fff71cb321a, offset=1, size=32
+    00007fff71c6d19c (06) c70018000000             MOV DWORD [RAX], 0x18
+    00007fff71c6d1a2 (02) eb08                     JMP 0x7fff71c6d1ac
+      ip-relative 00000008, absolute address= 00007fff71c6d1ac, offset=1, size=8
+    00007fff71c6d1a4 (03) 4889df                   MOV RDI, RBX
+    00007fff71c6d1a7 (05) e832feffff               CALL 0x7fff71c6cfde
+      ip-relative fffffe32, absolute address= 00007fff71c6cfde, offset=1, size=32
+    00007fff71c6d1ac (02) 31db                     XOR EBX, EBX
+    00007fff71c6d1ae (03) 4889d8                   MOV RAX, RBX
+    00007fff71c6d1b1 (04) 4883c408                 ADD RSP, 0x8
+    00007fff71c6d1b5 (01) 5b                       POP RBX
+    00007fff71c6d1b6 (02) 415e                     POP R14
+    00007fff71c6d1b8 (02) 415f                     POP R15
+    00007fff71c6d1ba (01) 5d                       POP RBP
+    00007fff71c6d1bb (01) c3                       RET
+  Write jump32 0x00007fff71c6d138 -> 0x00007ffefffff0d3
+  Write jump64 0x00007ffefffff0d3 -> 0x000000010b927960
+  Trampoline Instructions:
+    00007ffefffff0b0 (01) 55                       PUSH RBP
+    00007ffefffff0b1 (03) 4889e5                   MOV RBP, RSP
+    00007ffefffff0b4 (02) 4157                     PUSH R15
+    00007ffefffff0b6 (05) e983e0c671               JMP 0x7fff71c6d13e
+Leave funchook_prepare(..., [0x7fff71c6d138->0x7ffefffff0b0],...) => 0
+Enter funchook_install(0x10ba2f000, 0x0)
+  protect page 0x7ffefffff000 (size=4096)
+  unprotect memory 0x7fff71d25000 (size=4096, prot=read,write,exec) <- 0x7fff71d25af8 (size=5)
+  protect memory 0x7fff71d25000 (size=4096, prot=read,exec)
+  unprotect memory 0x7fff71d25000 (size=4096, prot=read,write,exec) <- 0x7fff71d25c74 (size=5)
+  protect memory 0x7fff71d25000 (size=4096, prot=read,exec)
+  unprotect memory 0x7fff71c6d000 (size=4096, prot=read,write,exec) <- 0x7fff71c6d138 (size=5)
+  protect memory 0x7fff71c6d000 (size=4096, prot=read,exec)
+Leave funchook_install() => 0
+Enter funchook_uninstall(0x10ba2f000, 0x0)
+  unprotect memory 0x7fff71d25000 (size=4096, prot=read,write,exec) <- 0x7fff71d25af8 (size=5)
+  protect memory 0x7fff71d25000 (size=4096, prot=read,exec)
+  unprotect memory 0x7fff71d25000 (size=4096, prot=read,write,exec) <- 0x7fff71d25c74 (size=5)
+  protect memory 0x7fff71d25000 (size=4096, prot=read,exec)
+  unprotect memory 0x7fff71c6d000 (size=4096, prot=read,write,exec) <- 0x7fff71c6d138 (size=5)
+  protect memory 0x7fff71c6d000 (size=4096, prot=read,exec)
+  unprotect page 0x7ffefffff000 (size=4096)
+Enter funchook_destroy(0x10ba2f000)
+ deallocate page 0x7ffefffff000 (size=4096)
+  page_size=4096
+  num_entries_in_page=56
+Leave funchook_create() => 0x102a32000
+Enter funchook_prepare(0x102a32000, 0x10294f700, 0x1029259d0)
+  Original Instructions:
+    00007fff71d25af8 (05) b805000002               MOV EAX, 0x2000005
+    00007fff71d25afd (03) 4989ca                   MOV R10, RCX
+    00007fff71d25b00 (02) 0f05                     SYSCALL
+    00007fff71d25b02 (02) 7308                     JAE 0x7fff71d25b0c
+      ip-relative 00000008, absolute address= 00007fff71d25b0c, offset=1, size=8
+    00007fff71d25b04 (03) 4889c7                   MOV RDI, RAX
+    00007fff71d25b07 (05) e9810b0000               JMP 0x7fff71d2668d
+      ip-relative 00000b81, absolute address= 00007fff71d2668d, offset=1, size=32
+    00007fff71d25b0c (01) c3                       RET
+  process map: 000000010289a000-0000000102934000
+  process map: 0000000102934000-000000010294e000
+  process map: 000000010294e000-0000000102950000
+  process map: 0000000102950000-00000001029ec000
+  process map: 00000001029ec000-00000001029ee000
+  process map: 00000001029ee000-00000001029ef000
+  process map: 00000001029ef000-0000000102a05000
+  process map: 0000000102a05000-0000000102a06000
+  process map: 0000000102a06000-0000000102a0d000
+  process map: 0000000102a0d000-0000000102a13000
+  process map: 0000000102a13000-0000000102a14000
+  process map: 0000000102a14000-0000000102a15000
+  process map: 0000000102a15000-0000000102a16000
+  process map: 0000000102a16000-0000000102a1a000
+  process map: 0000000102a1a000-0000000102a1b000
+  process map: 0000000102a1b000-0000000102a1c000
+  process map: 0000000102a1c000-0000000102a20000
+  process map: 0000000102a20000-0000000102a21000
+  process map: 0000000102a21000-0000000102a32000
+  process map: 0000000102a32000-0000000102a33000
+  process map: 000000010dbba000-000000010dc4b000
+  process map: 000000010dc4b000-000000010dc50000
+  process map: 000000010dc50000-000000010dc51000
+  process map: 000000010dc51000-000000010dc86000
+  process map: 000000010dc86000-000000010dcbe000
+  process map: 00007fc585c00000-00007fc585d00000
+  process map: 00007fc586000000-00007fc586800000
+  process map: 00007ffee9366000-00007ffeecb66000
+  process map: 00007ffeecb66000-00007ffeed366000
+  process map: 00007fff00000000-00007fff80000000
+  process map: 00007fff80000000-00007fff92800000
+  process map: 00007fff92800000-00007fff92a00000
+  process map: 00007fff92a00000-00007fff93200000
+  process map: 00007fff93200000-00007fff93400000
+  process map: 00007fff93400000-00007fff93600000
+  process map: 00007fff93600000-00007fff93800000
+  process map: 00007fff93800000-00007fff93a00000
+  process map: 00007fff93a00000-00007fff94c00000
+  process map: 00007fff94c00000-00007fff94e00000
+  process map: 00007fff94e00000-00007fff98400000
+  process map: 00007fff98400000-00007fff98600000
+  process map: 00007fff98600000-00007fff9b400000
+  process map: 00007fff9b400000-00007fff9b600000
+  process map: 00007fff9b600000-00007fff9b800000
+  process map: 00007fff9b800000-00007fff9ba00000
+  process map: 00007fff9ba00000-00007fff9bc00000
+  process map: 00007fff9bc00000-00007fff9be00000
+  process map: 00007fff9be00000-00007fff9c000000
+  process map: 00007fff9c000000-00007fffc0000000
+  process map: 00007fffc0000000-00007fffffe00000
+  process map: 00007fffffe00000-00007fffffe01000
+  process map: 00007fffffe87000-00007fffffe88000
+  -- Use address 0x7ffefffff000 or (nil) for function 0x7fff71d25af8
+  allocate page 0x7ffefffff000 (size=4096)
+  Write jump32 0x00007fff71d25af8 -> 0x00007ffefffff043
+  Write jump64 0x00007ffefffff043 -> 0x00000001029259d0
+  Trampoline Instructions:
+    00007ffefffff020 (05) b805000002               MOV EAX, 0x2000005
+    00007ffefffff025 (05) e9d36ad271               JMP 0x7fff71d25afd
+Leave funchook_prepare(..., [0x7fff71d25af8->0x7ffefffff020],...) => 0
+Enter funchook_prepare(0x102a32000, 0x10294f708, 0x1028f0cd0)
+  Original Instructions:
+    00007fff71d25c74 (05) b803000002               MOV EAX, 0x2000003
+    00007fff71d25c79 (03) 4989ca                   MOV R10, RCX
+    00007fff71d25c7c (02) 0f05                     SYSCALL
+    00007fff71d25c7e (02) 7308                     JAE 0x7fff71d25c88
+      ip-relative 00000008, absolute address= 00007fff71d25c88, offset=1, size=8
+    00007fff71d25c80 (03) 4889c7                   MOV RDI, RAX
+    00007fff71d25c83 (05) e9050a0000               JMP 0x7fff71d2668d
+      ip-relative 00000a05, absolute address= 00007fff71d2668d, offset=1, size=32
+    00007fff71d25c88 (01) c3                       RET
+  Write jump32 0x00007fff71d25c74 -> 0x00007ffefffff08b
+  Write jump64 0x00007ffefffff08b -> 0x00000001028f0cd0
+  Trampoline Instructions:
+    00007ffefffff068 (05) b803000002               MOV EAX, 0x2000003
+    00007ffefffff06d (05) e9076cd271               JMP 0x7fff71d25c79
+Leave funchook_prepare(..., [0x7fff71d25c74->0x7ffefffff068],...) => 0
+Enter funchook_prepare(0x102a32000, 0x10294f710, 0x102925a20)
+  Original Instructions:
+    00007fff71c6d138 (01) 55                       PUSH RBP
+    00007fff71c6d139 (03) 4889e5                   MOV RBP, RSP
+    00007fff71c6d13c (02) 4157                     PUSH R15
+    00007fff71c6d13e (02) 4156                     PUSH R14
+    00007fff71c6d140 (01) 53                       PUSH RBX
+    00007fff71c6d141 (01) 50                       PUSH RAX
+    00007fff71c6d142 (03) 4889f0                   MOV RAX, RSI
+    00007fff71c6d145 (03) 4989ff                   MOV R15, RDI
+    00007fff71c6d148 (04) 488d75e4                 LEA RSI, [RBP-0x1c]
+    00007fff71c6d14c (03) 4889c7                   MOV RDI, RAX
+    00007fff71c6d14f (05) e84affffff               CALL 0x7fff71c6d09e
+      ip-relative ffffff4a, absolute address= 00007fff71c6d09e, offset=1, size=32
+    00007fff71c6d154 (02) 85c0                     TEST EAX, EAX
+    00007fff71c6d156 (02) 7454                     JZ 0x7fff71c6d1ac
+      ip-relative 00000054, absolute address= 00007fff71c6d1ac, offset=1, size=8
+    00007fff71c6d158 (03) 4189c6                   MOV R14D, EAX
+    00007fff71c6d15b (05) bf01000000               MOV EDI, 0x1
+    00007fff71c6d160 (05) e839faffff               CALL 0x7fff71c6cb9e
+      ip-relative fffffa39, absolute address= 00007fff71c6cb9e, offset=1, size=32
+    00007fff71c6d165 (03) 4885c0                   TEST RAX, RAX
+    00007fff71c6d168 (02) 7442                     JZ 0x7fff71c6d1ac
+      ip-relative 00000042, absolute address= 00007fff71c6d1ac, offset=1, size=8
+    00007fff71c6d16a (03) 4889c3                   MOV RBX, RAX
+    00007fff71c6d16d (03) 8b75e4                   MOV ESI, [RBP-0x1c]
+    00007fff71c6d170 (03) 4c89ff                   MOV RDI, R15
+    00007fff71c6d173 (05) bab6010000               MOV EDX, 0x1b6
+    00007fff71c6d178 (02) 31c0                     XOR EAX, EAX
+    00007fff71c6d17a (05) e8bb640400               CALL 0x7fff71cb363a
+      ip-relative 000464bb, absolute address= 00007fff71cb363a, offset=1, size=32
+    00007fff71c6d17f (02) 85c0                     TEST EAX, EAX
+    00007fff71c6d181 (02) 7821                     JS 0x7fff71c6d1a4
+      ip-relative 00000021, absolute address= 00007fff71c6d1a4, offset=1, size=8
+    00007fff71c6d183 (05) 3d00800000               CMP EAX, 0x8000
+    00007fff71c6d188 (02) 7c32                     JL 0x7fff71c6d1bc
+      ip-relative 00000032, absolute address= 00007fff71c6d1bc, offset=1, size=8
+    00007fff71c6d18a (06) 66c743100000             MOV WORD [RBX+0x10], 0x0
+    00007fff71c6d190 (02) 89c7                     MOV EDI, EAX
+    00007fff71c6d192 (05) e86f620400               CALL 0x7fff71cb3406
+      ip-relative 0004626f, absolute address= 00007fff71cb3406, offset=1, size=32
+    00007fff71c6d197 (05) e87e600400               CALL 0x7fff71cb321a
+      ip-relative 0004607e, absolute address= 00007fff71cb321a, offset=1, size=32
+    00007fff71c6d19c (06) c70018000000             MOV DWORD [RAX], 0x18
+    00007fff71c6d1a2 (02) eb08                     JMP 0x7fff71c6d1ac
+      ip-relative 00000008, absolute address= 00007fff71c6d1ac, offset=1, size=8
+    00007fff71c6d1a4 (03) 4889df                   MOV RDI, RBX
+    00007fff71c6d1a7 (05) e832feffff               CALL 0x7fff71c6cfde
+      ip-relative fffffe32, absolute address= 00007fff71c6cfde, offset=1, size=32
+    00007fff71c6d1ac (02) 31db                     XOR EBX, EBX
+    00007fff71c6d1ae (03) 4889d8                   MOV RAX, RBX
+    00007fff71c6d1b1 (04) 4883c408                 ADD RSP, 0x8
+    00007fff71c6d1b5 (01) 5b                       POP RBX
+    00007fff71c6d1b6 (02) 415e                     POP R14
+    00007fff71c6d1b8 (02) 415f                     POP R15
+    00007fff71c6d1ba (01) 5d                       POP RBP
+    00007fff71c6d1bb (01) c3                       RET
+  Write jump32 0x00007fff71c6d138 -> 0x00007ffefffff0d3
+  Write jump64 0x00007ffefffff0d3 -> 0x0000000102925a20
+  Trampoline Instructions:
+    00007ffefffff0b0 (01) 55                       PUSH RBP
+    00007ffefffff0b1 (03) 4889e5                   MOV RBP, RSP
+    00007ffefffff0b4 (02) 4157                     PUSH R15
+    00007ffefffff0b6 (05) e983e0c671               JMP 0x7fff71c6d13e
+Leave funchook_prepare(..., [0x7fff71c6d138->0x7ffefffff0b0],...) => 0
+Enter funchook_install(0x102a32000, 0x0)
+  protect page 0x7ffefffff000 (size=4096)
+  unprotect memory 0x7fff71d25000 (size=4096, prot=read,write,exec) <- 0x7fff71d25af8 (size=5)
+  protect memory 0x7fff71d25000 (size=4096, prot=read,exec)
+  unprotect memory 0x7fff71d25000 (size=4096, prot=read,write,exec) <- 0x7fff71d25c74 (size=5)
+  protect memory 0x7fff71d25000 (size=4096, prot=read,exec)
+  unprotect memory 0x7fff71c6d000 (size=4096, prot=read,write,exec) <- 0x7fff71c6d138 (size=5)
+  protect memory 0x7fff71c6d000 (size=4096, prot=read,exec)
+Leave funchook_install() => 0
+  page_size=4096
+  num_entries_in_page=56
+Leave funchook_create() => 0x108a90000
+Enter funchook_prepare(0x108a90000, 0x1089ad6f0, 0x10894edd0)
+  Original Instructions:
+    00007fff71d25c74 (05) b803000002               MOV EAX, 0x2000003
+    00007fff71d25c79 (03) 4989ca                   MOV R10, RCX
+    00007fff71d25c7c (02) 0f05                     SYSCALL
+    00007fff71d25c7e (02) 7308                     JAE 0x7fff71d25c88
+      ip-relative 00000008, absolute address= 00007fff71d25c88, offset=1, size=8
+    00007fff71d25c80 (03) 4889c7                   MOV RDI, RAX
+    00007fff71d25c83 (05) e9050a0000               JMP 0x7fff71d2668d
+      ip-relative 00000a05, absolute address= 00007fff71d2668d, offset=1, size=32
+    00007fff71d25c88 (01) c3                       RET
+  process map: 00000001088f8000-0000000108992000
+  process map: 0000000108992000-00000001089ac000
+  process map: 00000001089ac000-00000001089ae000
+  process map: 00000001089ae000-0000000108a4a000
+  process map: 0000000108a4a000-0000000108a60000
+  process map: 0000000108a60000-0000000108a61000
+  process map: 0000000108a61000-0000000108a68000
+  process map: 0000000108a68000-0000000108a6e000
+  process map: 0000000108a6e000-0000000108a70000
+  process map: 0000000108a70000-0000000108a71000
+  process map: 0000000108a71000-0000000108a72000
+  process map: 0000000108a72000-0000000108a73000
+  process map: 0000000108a73000-0000000108a77000
+  process map: 0000000108a77000-0000000108a78000
+  process map: 0000000108a78000-0000000108a79000
+  process map: 0000000108a79000-0000000108a7d000
+  process map: 0000000108a7d000-0000000108a7e000
+  process map: 0000000108a7e000-0000000108a7f000
+  process map: 0000000108a7f000-0000000108a90000
+  process map: 0000000108a90000-0000000108a91000
+  process map: 000000010cc93000-000000010cd24000
+  process map: 000000010cd24000-000000010cd29000
+  process map: 000000010cd29000-000000010cd2a000
+  process map: 000000010cd2a000-000000010cd5f000
+  process map: 000000010cd5f000-000000010cd97000
+  process map: 00007fb741c00000-00007fb741d00000
+  process map: 00007fb741d00000-00007fb741e00000
+  process map: 00007fb742000000-00007fb742800000
+  process map: 00007ffee3308000-00007ffee6b08000
+  process map: 00007ffee6b08000-00007ffee7308000
+  process map: 00007fff00000000-00007fff80000000
+  process map: 00007fff80000000-00007fff92800000
+  process map: 00007fff92800000-00007fff92a00000
+  process map: 00007fff92a00000-00007fff93200000
+  process map: 00007fff93200000-00007fff93400000
+  process map: 00007fff93400000-00007fff93600000
+  process map: 00007fff93600000-00007fff93800000
+  process map: 00007fff93800000-00007fff93a00000
+  process map: 00007fff93a00000-00007fff94c00000
+  process map: 00007fff94c00000-00007fff94e00000
+  process map: 00007fff94e00000-00007fff98400000
+  process map: 00007fff98400000-00007fff98600000
+  process map: 00007fff98600000-00007fff9b400000
+  process map: 00007fff9b400000-00007fff9b600000
+  process map: 00007fff9b600000-00007fff9b800000
+  process map: 00007fff9b800000-00007fff9ba00000
+  process map: 00007fff9ba00000-00007fff9bc00000
+  process map: 00007fff9bc00000-00007fff9be00000
+  process map: 00007fff9be00000-00007fff9c000000
+  process map: 00007fff9c000000-00007fffc0000000
+  process map: 00007fffc0000000-00007fffffe00000
+  process map: 00007fffffe00000-00007fffffe01000
+  process map: 00007fffffe87000-00007fffffe88000
+  -- Use address 0x7ffefffff000 or (nil) for function 0x7fff71d25c74
+  allocate page 0x7ffefffff000 (size=4096)
+  Write jump32 0x00007fff71d25c74 -> 0x00007ffefffff043
+  Write jump64 0x00007ffefffff043 -> 0x000000010894edd0
+  Trampoline Instructions:
+    00007ffefffff020 (05) b803000002               MOV EAX, 0x2000003
+    00007ffefffff025 (05) e94f6cd271               JMP 0x7fff71d25c79
+Leave funchook_prepare(..., [0x7fff71d25c74->0x7ffefffff020],...) => 0
+Enter funchook_install(0x108a90000, 0x0)
+  protect page 0x7ffefffff000 (size=4096)
+  unprotect memory 0x7fff71d25000 (size=4096, prot=read,write,exec) <- 0x7fff71d25c74 (size=5)
+  protect memory 0x7fff71d25000 (size=4096, prot=read,exec)
+Leave funchook_install() => 0
