@@ -1,14 +1,15 @@
-package com.epam.drill.hook.http
+package com.epam.drill.hook.io
 
 import com.epam.drill.hook.gen.*
+import com.epam.drill.hook.io.tcp.processWriteEvent
 import kotlinx.cinterop.*
 import platform.posix.iovec
 import platform.posix.ssize_t
 
-actual fun configureHttpHooks() = configureHttpHooksBuild {
+fun configureTcpHooks() = configureTcpHooksBuild {
     println("Configuration for unix")
-    funchook_prepare(httpHook, writev_func_point, staticCFunction(::writevDrill))
-    funchook_prepare(httpHook, readv_func_point, staticCFunction(::readvDrill))
+    funchook_prepare(tcpHook, writev_func_point, staticCFunction(::writevDrill))
+    funchook_prepare(tcpHook, readv_func_point, staticCFunction(::readvDrill))
 }
 
 fun readvDrill(fd: Int, iovec: CPointer<iovec>?, size: Int): ssize_t {
@@ -24,7 +25,7 @@ fun writevDrill(fd: Int, iovec: CPointer<iovec>?, size: Int): ssize_t {
         val iovecs = iovec!![0]
         val iovLen = iovecs.iov_len
         val base = iovecs.iov_base!!.reinterpret<ByteVarOf<Byte>>()
-        val (finalBuf, finalSize, injectedSize) = processWriteEvent(base, iovLen.convert())
+        val (finalBuf, finalSize, injectedSize) = processWriteEvent(fd.convert(), base, iovLen.convert())
         iovec[0].iov_base = finalBuf
         iovec[0].iov_len = finalSize.convert()
         (writev_func!!(fd, iovec, size) - injectedSize).convert()

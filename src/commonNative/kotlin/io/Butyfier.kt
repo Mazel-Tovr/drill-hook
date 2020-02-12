@@ -1,4 +1,4 @@
-package com.epam.drill.hook
+package com.epam.drill.hook.io
 
 import com.epam.drill.hook.gen.*
 

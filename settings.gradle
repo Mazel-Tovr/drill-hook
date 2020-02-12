@@ -1,4 +1,0 @@
-rootProject.name = 'drill-hook'
-include(":core")
-include(":platform")
-include(":test")
