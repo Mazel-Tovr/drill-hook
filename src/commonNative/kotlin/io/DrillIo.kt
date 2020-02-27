@@ -2,6 +2,7 @@
 
 package com.epam.drill.hook.io
 
+import co.touchlab.stately.collections.frozenHashSet
 import com.epam.drill.hook.gen.*
 import com.epam.drill.hook.io.tcp.processWriteEvent
 import com.epam.drill.hook.io.tcp.tryDetectProtocol
@@ -18,9 +19,9 @@ val tcpInitializer = run {
     val socketHook = funchook_create()
     funchook_prepare(socketHook, close_func_point, staticCFunction(::drillClose)).check("prepare close_func_point")
     funchook_prepare(
-            socketHook,
-            connect_func_point,
-            staticCFunction(::drillConnect)
+        socketHook,
+        connect_func_point,
+        staticCFunction(::drillConnect)
     ).check("prepare connect_func_point")
     funchook_prepare(socketHook, accept_func_point, staticCFunction(::drillAccept)).check("prepare accept_func_point")
     funchook_install(socketHook, 0).check("funchook_install")
@@ -29,10 +30,10 @@ val tcpInitializer = run {
 @SharedImmutable
 private val accessThread = Worker.start(true)
 
-@ThreadLocal
-private val _connects: MutableSet<DRILL_SOCKET> = mutableSetOf()
-@ThreadLocal
-private val _accepts: MutableSet<DRILL_SOCKET> = mutableSetOf()
+@SharedImmutable
+private val connects: MutableSet<DRILL_SOCKET> = frozenHashSet()
+@SharedImmutable
+private val accepts: MutableSet<DRILL_SOCKET> = frozenHashSet()
 
 @ThreadLocal
 private var _tcpHook: CPointer<funchook_t>? = null
@@ -49,6 +50,7 @@ fun configureTcpHooksBuild(block: () -> Unit) = if (tcpHook != null) {
         println("Failed to create hook")
         return
     }
+    println("sss")
     funchook_prepare(tcpHook, read_func_point, staticCFunction(::drillRead)).check("prepare read_func_point")
     funchook_prepare(tcpHook, write_func_point, staticCFunction(::drillWrite)).check("prepare write_func_point")
     funchook_prepare(tcpHook, send_func_point, staticCFunction(::drillSend)).check("prepare send_func_point")
@@ -61,12 +63,6 @@ fun configureTcpHooksBuild(block: () -> Unit) = if (tcpHook != null) {
 fun removeTcpHook() {
     funchook_uninstall(tcpHook, 0).check("funchook_uninstall")
 }
-
-val connects
-    get() = accessThread.execute(TransferMode.UNSAFE, {}) { _connects }.result
-
-val accepts
-    get() = accessThread.execute(TransferMode.UNSAFE, {}) { _accepts }.result
 
 
 internal fun drillRead(fd: DRILL_SOCKET, buf: CPointer<ByteVarOf<Byte>>?, size: size_t): ssize_t {
@@ -113,9 +109,9 @@ internal fun drillConnect(fd: DRILL_SOCKET, addr: CPointer<sockaddr>?, socklen: 
 }
 
 internal fun drillAccept(
-        fd: DRILL_SOCKET,
-        addr: CPointer<sockaddr>?,
-        socklen: CPointer<drill_sock_lenVar>?
+    fd: DRILL_SOCKET,
+    addr: CPointer<sockaddr>?,
+    socklen: CPointer<drill_sock_lenVar>?
 ): DRILL_SOCKET {
     initRuntimeIfNeeded()
     val socket = nativeAccept(fd, addr, socklen)

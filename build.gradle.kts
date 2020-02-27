@@ -17,6 +17,10 @@ kotlin {
     crossCompilation {
         common {
             addCInterop()
+            dependencies {
+                implementation ("co.touchlab:stately:0.9.4")
+                implementation ("co.touchlab:stately-collections:0.9.4")
+            }
         }
     }
 
