@@ -2,8 +2,8 @@ import com.epam.drill.gradle.*
 import org.jetbrains.kotlin.gradle.plugin.mpp.*
 
 plugins {
-    id("org.jetbrains.kotlin.multiplatform") version "1.3.61"
-    id("com.epam.drill.cross-compilation") version "0.14.2"
+    id("org.jetbrains.kotlin.multiplatform") version "1.3.70"
+    id("com.epam.drill.cross-compilation") version "0.15.1"
     `maven-publish`
 }
 
@@ -18,8 +18,8 @@ kotlin {
         common {
             addCInterop()
             dependencies {
-                implementation ("co.touchlab:stately:0.9.4")
-                implementation ("co.touchlab:stately-collections:0.9.4")
+                implementation ("co.touchlab:stately-isolate:1.0.0-a2")
+                implementation ("co.touchlab:stately-iso-collections:1.0.0-a2")
             }
         }
     }

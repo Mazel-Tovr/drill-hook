@@ -42,7 +42,7 @@ fun drillWsaSend(
         buff[0].buf = finalBuf
         buff[0].len = finalSize.convert()
         val wsasendFunc = wsaSend_func!!(fd, buff, buffersSize, written, p5, p6, p7)
-        written!!.pointed.value -= injectedSize.convert()
+        written!!.pointed.value -= injectedSize.toUInt()
         (wsasendFunc).convert()
     }
 }

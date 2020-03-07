@@ -2,7 +2,7 @@
 
 package com.epam.drill.hook.io
 
-import co.touchlab.stately.collections.frozenHashSet
+import co.touchlab.stately.collections.sharedMutableSetOf
 import com.epam.drill.hook.gen.*
 import com.epam.drill.hook.io.tcp.processWriteEvent
 import com.epam.drill.hook.io.tcp.tryDetectProtocol
@@ -31,9 +31,9 @@ val tcpInitializer = run {
 private val accessThread = Worker.start(true)
 
 @SharedImmutable
-private val connects: MutableSet<DRILL_SOCKET> = frozenHashSet()
+private val connects: MutableSet<DRILL_SOCKET> = sharedMutableSetOf()
 @SharedImmutable
-private val accepts: MutableSet<DRILL_SOCKET> = frozenHashSet()
+private val accepts: MutableSet<DRILL_SOCKET> = sharedMutableSetOf()
 
 @ThreadLocal
 private var _tcpHook: CPointer<funchook_t>? = null
@@ -50,7 +50,6 @@ fun configureTcpHooksBuild(block: () -> Unit) = if (tcpHook != null) {
         println("Failed to create hook")
         return
     }
-    println("sss")
     funchook_prepare(tcpHook, read_func_point, staticCFunction(::drillRead)).check("prepare read_func_point")
     funchook_prepare(tcpHook, write_func_point, staticCFunction(::drillWrite)).check("prepare write_func_point")
     funchook_prepare(tcpHook, send_func_point, staticCFunction(::drillSend)).check("prepare send_func_point")
