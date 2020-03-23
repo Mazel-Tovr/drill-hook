@@ -34,15 +34,22 @@ fun drillWsaSend(
     p7: LPWSAOVERLAPPED_COMPLETION_ROUTINE?
 ): Int {
     initRuntimeIfNeeded()
-    val buffer = buff!![0]
-    val size = buffer.len
-    val buf = buffer.buf
+    var dif = 0
     return memScoped {
-        val (finalBuf, finalSize, injectedSize) = processWriteEvent(fd.convert(), buf, size.convert())
-        buff[0].buf = finalBuf
-        buff[0].len = finalSize.convert()
+        for (i in 0 until buffersSize.toInt()) {
+            val buffer = buff!![i]
+            val size = buffer.len
+            val buf = buffer.buf
+
+
+
+            val (finalBuf, finalSize, injectedSize) = processWriteEvent(fd.convert(), buf, size.convert())
+            dif += injectedSize
+            buff[i].buf = finalBuf
+            buff[i].len = finalSize.convert()
+        }
         val wsasendFunc = wsaSend_func!!(fd, buff, buffersSize, written, p5, p6, p7)
-        written!!.pointed.value -= injectedSize.toUInt()
+        written!!.pointed.value -= dif.toUInt()
         (wsasendFunc).convert()
     }
 }

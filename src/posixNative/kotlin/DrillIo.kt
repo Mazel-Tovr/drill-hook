@@ -21,14 +21,17 @@ fun readvDrill(fd: Int, iovec: CPointer<iovec>?, size: Int): ssize_t {
 
 fun writevDrill(fd: Int, iovec: CPointer<iovec>?, size: Int): ssize_t {
     return memScoped {
-        //todo I think we(headers) should be in the first buffer
-        val iovecs = iovec!![0]
-        val iovLen = iovecs.iov_len
-        val base = iovecs.iov_base!!.reinterpret<ByteVarOf<Byte>>()
-        val (finalBuf, finalSize, injectedSize) = processWriteEvent(fd.convert(), base, iovLen.convert())
-        iovec[0].iov_base = finalBuf
-        iovec[0].iov_len = finalSize.convert()
-        (writev_func!!(fd, iovec, size) - injectedSize).convert()
+        var dif = 0
+        for (i in 0 until size) {
+            val iovecs = iovec!![i]
+            val iovLen = iovecs.iov_len
+            val base = iovecs.iov_base!!.reinterpret<ByteVarOf<Byte>>()
+            val (finalBuf, finalSize, injectedSize) = processWriteEvent(fd.convert(), base, iovLen.convert())
+            iovec[i].iov_base = finalBuf
+            iovec[i].iov_len = finalSize.convert()
+            dif += injectedSize
+        }
+        (writev_func!!(fd, iovec, size) - dif).convert()
 
     }
 
