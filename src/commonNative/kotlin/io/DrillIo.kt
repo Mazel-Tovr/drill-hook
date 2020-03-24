@@ -4,6 +4,7 @@ package com.epam.drill.hook.io
 
 import co.touchlab.stately.collections.sharedMutableSetOf
 import com.epam.drill.hook.gen.*
+import com.epam.drill.hook.io.tcp.close
 import com.epam.drill.hook.io.tcp.processWriteEvent
 import com.epam.drill.hook.io.tcp.tryDetectProtocol
 import kotlinx.cinterop.*
@@ -125,6 +126,7 @@ internal fun drillClose(fd: DRILL_SOCKET): Int {
     if (result == 0) {
         accepts -= fd
         connects -= fd
+        close(fd)
     }
     return result
 }

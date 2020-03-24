@@ -24,13 +24,14 @@ interface WriteInterceptor {
 
 interface Interceptor : ReadInterceptor, WriteInterceptor {
     fun isSuitableByteStream(fd: DRILL_SOCKET, bytes: CPointer<ByteVarOf<Byte>>): Boolean
+    fun close(fd: DRILL_SOCKET)
 }
 
 
 fun tryDetectProtocol(fd: DRILL_SOCKET, buf: CPointer<ByteVarOf<Byte>>?, size: Int) {
     buf?.let { byteBuf ->
         interceptors.forEach {
-            it?.let {
+            it.let {
                 if (it.isSuitableByteStream(fd, byteBuf)) {
                     memScoped {
                         with(it) {
@@ -38,11 +39,17 @@ fun tryDetectProtocol(fd: DRILL_SOCKET, buf: CPointer<ByteVarOf<Byte>>?, size: I
                         }
                     }
                 }
+
             }
         }
     }
 }
 
+fun close(fd: DRILL_SOCKET){
+    interceptors.forEach {
+        it.close(fd)
+    }
+}
 
 fun MemScope.processWriteEvent(fd: DRILL_SOCKET, buf: CPointer<ByteVarOf<Byte>>?, size: Int): TcpFinalData {
     return buf?.let { byteBuf ->
@@ -71,7 +78,10 @@ val CR_LF_BYTES = CR_LF.encodeToByteArray()
 val HEADERS_DELIMITER = CR_LF_BYTES + CR_LF_BYTES
 
 @SharedImmutable
-val headersForInject = AtomicReference({ emptyMap<String, String>() }.freeze()).freeze()
+val injectedHeaders = AtomicReference({ emptyMap<String, String>() }.freeze()).freeze()
+
+@SharedImmutable
+val readHeaders = AtomicReference({  _: Map<ByteArray, ByteArray> -> Unit}.freeze()).freeze()
 
 @SharedImmutable
 val readCallback = AtomicReference({ _: ByteArray -> Unit }.freeze()).freeze()
