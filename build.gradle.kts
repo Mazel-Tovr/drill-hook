@@ -18,8 +18,8 @@ kotlin {
         common {
             addCInterop()
             dependencies {
-                implementation ("co.touchlab:stately-isolate:1.0.0-a2")
-                implementation ("co.touchlab:stately-iso-collections:1.0.0-a2")
+                implementation("org.jetbrains.kotlinx:atomicfu-native:0.14.3")
+                implementation("org.jetbrains.kotlinx:kotlinx-collections-immutable:0.3.2")
             }
         }
     }

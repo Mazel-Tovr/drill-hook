@@ -2,12 +2,16 @@
 
 package com.epam.drill.hook.io
 
-import co.touchlab.stately.collections.sharedMutableSetOf
 import com.epam.drill.hook.gen.*
 import com.epam.drill.hook.io.tcp.close
 import com.epam.drill.hook.io.tcp.processWriteEvent
 import com.epam.drill.hook.io.tcp.tryDetectProtocol
+import kotlinx.atomicfu.atomic
+import kotlinx.atomicfu.update
 import kotlinx.cinterop.*
+import kotlinx.collections.immutable.minus
+import kotlinx.collections.immutable.persistentHashSetOf
+import kotlinx.collections.immutable.plus
 import platform.posix.size_t
 import platform.posix.sockaddr
 import platform.posix.ssize_t
@@ -32,9 +36,15 @@ val tcpInitializer = run {
 private val accessThread = Worker.start(true)
 
 @SharedImmutable
-private val connects: MutableSet<DRILL_SOCKET> = sharedMutableSetOf()
+private val _connects = atomic(persistentHashSetOf<DRILL_SOCKET>())
+
 @SharedImmutable
-private val accepts: MutableSet<DRILL_SOCKET> = sharedMutableSetOf()
+private val _accepts = atomic(persistentHashSetOf<DRILL_SOCKET>())
+
+val connects
+    get() = _connects.value
+private val accepts
+    get() = _accepts.value
 
 @ThreadLocal
 private var _tcpHook: CPointer<funchook_t>? = null
@@ -78,9 +88,9 @@ internal fun drillWrite(fd: DRILL_SOCKET, buf: CPointer<ByteVarOf<Byte>>?, size:
 
     return memScoped {
         val (finalBuf, finalSize, ll) =
-                if (accepts.contains(fd.convert()) || connects.contains(fd.convert()))
-                    processWriteEvent(fd.convert(), buf, size.convert())
-                else TcpFinalData(buf, size.convert())
+            if (accepts.contains(fd.convert()) || connects.contains(fd.convert()))
+                processWriteEvent(fd.convert(), buf, size.convert())
+            else TcpFinalData(buf, size.convert())
         (nativeWrite(fd.convert(), finalBuf, (finalSize).convert()) - ll).convert()
     }
 }
@@ -104,7 +114,7 @@ internal fun drillRecv(fd: DRILL_SOCKET, buf: CPointer<ByteVarOf<Byte>>?, size: 
 internal fun drillConnect(fd: DRILL_SOCKET, addr: CPointer<sockaddr>?, socklen: drill_sock_len): Int {
     initRuntimeIfNeeded()
     val connectStatus = nativeConnect(fd, addr, socklen).convert<Int>()
-    if (0 == connectStatus) connects += fd
+    if (0 == connectStatus) _connects.update { it + fd }
     return connectStatus
 }
 
@@ -116,7 +126,7 @@ internal fun drillAccept(
     initRuntimeIfNeeded()
     val socket = nativeAccept(fd, addr, socklen)
     if (isValidSocket(socket) == 0)
-        accepts += socket
+        _accepts.update { it + socket }
     return socket
 }
 
@@ -124,8 +134,8 @@ internal fun drillClose(fd: DRILL_SOCKET): Int {
     initRuntimeIfNeeded()
     val result = nativeClose(fd)
     if (result == 0) {
-        accepts -= fd
-        connects -= fd
+        _accepts.update { it - fd }
+        _connects.update { it - fd }
         close(fd)
     }
     return result

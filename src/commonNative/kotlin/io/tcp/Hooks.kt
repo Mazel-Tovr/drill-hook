@@ -1,18 +1,27 @@
 package com.epam.drill.hook.io.tcp
 
-import co.touchlab.stately.collections.sharedMutableSetOf
 import com.epam.drill.hook.gen.DRILL_SOCKET
 import com.epam.drill.hook.io.TcpFinalData
+import kotlinx.atomicfu.atomic
+import kotlinx.atomicfu.update
 import kotlinx.cinterop.ByteVarOf
 import kotlinx.cinterop.CPointer
 import kotlinx.cinterop.MemScope
 import kotlinx.cinterop.memScoped
-import kotlin.native.concurrent.AtomicReference
+import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.plus
 import kotlin.native.concurrent.freeze
 
 
 @SharedImmutable
-val interceptors =sharedMutableSetOf<Interceptor>()
+private val _interceptors = atomic(persistentListOf<Interceptor>())
+
+val interceptors: List<Interceptor>
+    get() = _interceptors.value
+
+fun addInterceptor(interceptor: Interceptor) {
+    _interceptors.update { it + interceptor }
+}
 
 interface ReadInterceptor {
     fun MemScope.interceptRead(fd: DRILL_SOCKET, bytes: CPointer<ByteVarOf<Byte>>, size: Int)
@@ -45,7 +54,7 @@ fun tryDetectProtocol(fd: DRILL_SOCKET, buf: CPointer<ByteVarOf<Byte>>?, size: I
     }
 }
 
-fun close(fd: DRILL_SOCKET){
+fun close(fd: DRILL_SOCKET) {
     interceptors.forEach {
         it.close(fd)
     }
@@ -56,7 +65,7 @@ fun MemScope.processWriteEvent(fd: DRILL_SOCKET, buf: CPointer<ByteVarOf<Byte>>?
         interceptors.forEach {
             it.let {
                 if (it.isSuitableByteStream(fd, byteBuf))
-                    return  with(it) {
+                    return with(it) {
                         interceptWrite(fd, buf, size)
                     }
                 else TcpFinalData(buf, size)
@@ -78,13 +87,13 @@ val CR_LF_BYTES = CR_LF.encodeToByteArray()
 val HEADERS_DELIMITER = CR_LF_BYTES + CR_LF_BYTES
 
 @SharedImmutable
-val injectedHeaders = AtomicReference({ emptyMap<String, String>() }.freeze()).freeze()
+val injectedHeaders = atomic({ emptyMap<String, String>() }.freeze()).freeze()
 
 @SharedImmutable
-val readHeaders = AtomicReference({  _: Map<ByteArray, ByteArray> -> Unit}.freeze()).freeze()
+val readHeaders = atomic({ _: Map<ByteArray, ByteArray> -> Unit }.freeze()).freeze()
 
 @SharedImmutable
-val readCallback = AtomicReference({ _: ByteArray -> Unit }.freeze()).freeze()
+val readCallback = atomic({ _: ByteArray -> Unit }.freeze()).freeze()
 
 @SharedImmutable
-val writeCallback = AtomicReference({ _: ByteArray -> Unit }.freeze()).freeze()
+val writeCallback = atomic({ _: ByteArray -> Unit }.freeze()).freeze()
