@@ -2,7 +2,7 @@ import com.epam.drill.gradle.*
 import org.jetbrains.kotlin.gradle.plugin.mpp.*
 
 plugins {
-    id("org.jetbrains.kotlin.multiplatform") version "1.3.70"
+    id("org.jetbrains.kotlin.multiplatform") version "1.4.20"
     id("com.epam.drill.cross-compilation") version "0.15.1"
     `maven-publish`
 }
@@ -18,8 +18,8 @@ kotlin {
         common {
             addCInterop()
             dependencies {
-                implementation("org.jetbrains.kotlinx:atomicfu-native:0.14.3")
-                implementation("org.jetbrains.kotlinx:kotlinx-collections-immutable:0.3.2")
+                implementation("org.jetbrains.kotlinx:atomicfu:0.15.0")
+                implementation("org.jetbrains.kotlinx:kotlinx-collections-immutable:0.3.3")
             }
         }
     }
