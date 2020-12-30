@@ -2,8 +2,8 @@ import com.epam.drill.gradle.*
 import org.jetbrains.kotlin.gradle.plugin.mpp.*
 
 plugins {
-    id("org.jetbrains.kotlin.multiplatform") version "1.3.70"
-    id("com.epam.drill.cross-compilation") version "0.15.1"
+    kotlin("multiplatform")
+    id("com.epam.drill.cross-compilation")
     `maven-publish`
 }
 
@@ -12,14 +12,17 @@ repositories {
     jcenter()
 }
 
+val atomicfuVersion: String by extra
+val kxCollectionsVersion: String by extra
+
 kotlin {
 
     crossCompilation {
         common {
             addCInterop()
             dependencies {
-                implementation("org.jetbrains.kotlinx:atomicfu-native:0.14.3")
-                implementation("org.jetbrains.kotlinx:kotlinx-collections-immutable:0.3.2")
+                implementation("org.jetbrains.kotlinx:atomicfu:$atomicfuVersion")
+                implementation("org.jetbrains.kotlinx:kotlinx-collections-immutable:$kxCollectionsVersion")
             }
         }
     }

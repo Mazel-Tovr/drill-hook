@@ -1,16 +1,11 @@
 package com.epam.drill.hook.io
 
-import com.epam.drill.hook.gen.funchook_prepare
-import com.epam.drill.hook.gen.wsaSend_func
-import com.epam.drill.hook.gen.wsaSend_func_point
-import com.epam.drill.hook.gen.wsaRecv_func
-import com.epam.drill.hook.gen.wsaRecv_func_point
+import com.epam.drill.hook.gen.*
 import com.epam.drill.hook.io.tcp.processWriteEvent
 import com.epam.drill.hook.io.tcp.tryDetectProtocol
 import kotlinx.cinterop.*
 import platform.posix.LPWSAOVERLAPPED_COMPLETION_ROUTINE
 import platform.posix.SOCKET
-import platform.posix.WSABUF
 import platform.posix._WSABUF
 import platform.windows.LPDWORD
 import platform.windows._OVERLAPPED
@@ -23,8 +18,7 @@ fun configureTcpHooks() {
     }
 }
 
-
-fun drillWsaSend(
+private fun drillWsaSend(
     fd: SOCKET,
     buff: CPointer<_WSABUF>?,
     buffersSize: UInt,
@@ -40,9 +34,6 @@ fun drillWsaSend(
             val buffer = buff!![i]
             val size = buffer.len
             val buf = buffer.buf
-
-
-
             val (finalBuf, finalSize, injectedSize) = processWriteEvent(fd.convert(), buf, size.convert())
             dif += injectedSize
             buff[i].buf = finalBuf
@@ -54,7 +45,7 @@ fun drillWsaSend(
     }
 }
 
-fun drillWsaRecv(
+private fun drillWsaRecv(
     fd: SOCKET,
     buff: CPointer<_WSABUF>?,
     p3: UInt,
@@ -66,7 +57,6 @@ fun drillWsaRecv(
     initRuntimeIfNeeded()
     val wsarecvFunc: Int = wsaRecv_func!!(fd, buff, p3, read, p5, p6, p7)
     val finalBuf = buff!!.pointed
-    tryDetectProtocol(fd, finalBuf.buf, read!!.pointed.value.convert())
+    tryDetectProtocol(fd.convert(), finalBuf.buf, read!!.pointed.value.convert())
     return wsarecvFunc
-
 }
