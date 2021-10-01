@@ -1,15 +1,18 @@
-import com.epam.drill.gradle.*
 import org.jetbrains.kotlin.gradle.plugin.mpp.*
+import java.net.*
 
 plugins {
     kotlin("multiplatform")
-    id("com.epam.drill.cross-compilation")
+    id("com.github.hierynomus.license")
     `maven-publish`
 }
 
+val scriptUrl: String by extra
+
 repositories {
+    mavenLocal()
     mavenCentral()
-    jcenter()
+    apply(from = "$scriptUrl/maven-repo.gradle.kts")
 }
 
 val atomicfuVersion: String by extra
@@ -17,22 +20,38 @@ val kxCollectionsVersion: String by extra
 
 kotlin {
 
-    crossCompilation {
-        common {
-            addCInterop()
+    targets {
+        setOf(
+            macosX64(),
+            mingwX64(),
+            linuxX64()
+        ).forEach {
+            it.compilations["main"].addCInterop()
+        }
+    }
+    sourceSets {
+        val commonMain by getting {
             dependencies {
                 implementation("org.jetbrains.kotlinx:atomicfu:$atomicfuVersion")
                 implementation("org.jetbrains.kotlinx:kotlinx-collections-immutable:$kxCollectionsVersion")
             }
         }
-    }
+        val commonNative by creating {
+            dependsOn(commonMain)
+        }
 
-    setOf(
-        macosX64(),
-        mingwX64(),
-        linuxX64()
-    ).forEach {
-        it.mainCompilation.addCInterop()
+        val posixNative by creating {
+            dependsOn(commonNative)
+        }
+        val linuxX64Main by getting {
+            dependsOn(posixNative)
+        }
+        val macosX64Main by getting {
+            dependsOn(posixNative)
+        }
+        val mingwX64Main by getting {
+            dependsOn(commonNative)
+        }
     }
 
 }
@@ -43,27 +62,23 @@ tasks.withType<org.jetbrains.kotlin.gradle.targets.native.tasks.KotlinNativeTest
 }
 
 tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinNativeCompile> {
-    kotlinOptions.freeCompilerArgs += "-Xuse-experimental=kotlin.ExperimentalUnsignedTypes"
+    kotlinOptions.freeCompilerArgs += "-Xopt-in=kotlin.ExperimentalUnsignedTypes"
 }
 
-publishing {
-    repositories {
-        maven {
-            url = uri("https://oss.jfrog.org/oss-release-local")
-            credentials {
-                username =
-                    if (project.hasProperty("bintrayUser"))
-                        project.property("bintrayUser").toString()
-                    else System.getenv("BINTRAY_USER")
-                password =
-                    if (project.hasProperty("bintrayApiKey"))
-                        project.property("bintrayApiKey").toString()
-                    else System.getenv("BINTRAY_API_KEY")
-            }
-        }
-    }
-}
 
 fun KotlinNativeCompilation.addCInterop() {
     cinterops.create("hook_bindings").includeDirs(rootProject.file("lib").resolve("include"))
 }
+
+val licenseFormatSettings by tasks.registering(com.hierynomus.gradle.license.tasks.LicenseFormat::class) {
+    source = fileTree(project.projectDir).also {
+        include("**/*.kt", "**/*.java", "**/*.groovy")
+        exclude("**/.idea")
+    }.asFileTree
+}
+
+license {
+    headerURI = URI("https://raw.githubusercontent.com/Drill4J/drill4j/develop/COPYRIGHT")
+}
+
+tasks["licenseFormat"].dependsOn(licenseFormatSettings)

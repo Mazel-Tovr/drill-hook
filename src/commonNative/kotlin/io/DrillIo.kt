@@ -1,49 +1,47 @@
+/**
+ * Copyright 2020 EPAM Systems
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 @file:Suppress("ObjectPropertyName")
 
 package com.epam.drill.hook.io
 
 import com.epam.drill.hook.gen.*
-import com.epam.drill.hook.io.tcp.close
-import com.epam.drill.hook.io.tcp.processWriteEvent
-import com.epam.drill.hook.io.tcp.tryDetectProtocol
-import kotlinx.atomicfu.atomic
-import kotlinx.atomicfu.update
+import kotlinx.atomicfu.*
 import kotlinx.cinterop.*
-import kotlinx.collections.immutable.minus
-import kotlinx.collections.immutable.persistentHashSetOf
-import kotlinx.collections.immutable.plus
-import platform.posix.size_t
-import platform.posix.sockaddr
-import platform.posix.ssize_t
-import kotlin.native.concurrent.TransferMode
-import kotlin.native.concurrent.Worker
+import kotlinx.collections.immutable.*
+import platform.posix.*
+import kotlin.native.SharedImmutable
+import kotlin.native.ThreadLocal
+import kotlin.native.concurrent.*
 
 @Suppress("unused")
-@kotlin.native.concurrent.SharedImmutable
-val tcpInitializer = run {
-    val socketHook = funchook_create()
-    funchook_prepare(socketHook, close_func_point, staticCFunction(::drillClose)).check("prepare close_func_point")
-    funchook_prepare(
-        socketHook,
-        connect_func_point,
-        staticCFunction(::drillConnect)
-    ).check("prepare connect_func_point")
-    funchook_prepare(socketHook, accept_func_point, staticCFunction(::drillAccept)).check("prepare accept_func_point")
-    funchook_install(socketHook, 0).check("funchook_install")
-}
+@SharedImmutable
+expect val tcpInitializer: Unit
 
 @SharedImmutable
 private val accessThread = Worker.start(true)
 
 @SharedImmutable
-private val _connects = atomic(persistentHashSetOf<DRILL_SOCKET>())
+val _connects = atomic(persistentHashSetOf<DRILL_SOCKET>())
 
 @SharedImmutable
-private val _accepts = atomic(persistentHashSetOf<DRILL_SOCKET>())
+val _accepts = atomic(persistentHashSetOf<DRILL_SOCKET>())
 
 val connects
     get() = _connects.value
-private val accepts
+val accepts
     get() = _accepts.value
 
 @ThreadLocal
@@ -53,6 +51,7 @@ var tcpHook
     get() = accessThread.execute(TransferMode.UNSAFE, {}) { _tcpHook }.result
     set(value) = accessThread.execute(TransferMode.UNSAFE, { value }) { _tcpHook = it }.result
 
+expect fun configureTcpHooks()
 
 fun configureTcpHooksBuild(block: () -> Unit) = if (tcpHook != null) {
     funchook_install(tcpHook, 0).check("funchook_install")
@@ -74,42 +73,15 @@ fun removeTcpHook() {
     funchook_uninstall(tcpHook, 0).check("funchook_uninstall")
 }
 
+//TODO EPMDJ-8696 Move back to common module
 
-internal fun drillRead(fd: DRILL_SOCKET, buf: CPointer<ByteVarOf<Byte>>?, size: size_t): ssize_t {
-    initRuntimeIfNeeded()
-    val read = nativeRead(fd.convert(), buf, size.convert())
-    if (read > 0 && (accepts.contains(fd.convert()) || connects.contains(fd.convert())))
-        tryDetectProtocol(fd.convert(), buf, read.convert())
-    return read.convert()
-}
+expect fun drillRead(fd: DRILL_SOCKET, buf: CPointer<ByteVarOf<Byte>>?, size: size_t): ssize_t
 
-internal fun drillWrite(fd: DRILL_SOCKET, buf: CPointer<ByteVarOf<Byte>>?, size: size_t): ssize_t {
-    initRuntimeIfNeeded()
+expect fun drillWrite(fd: DRILL_SOCKET, buf: CPointer<ByteVarOf<Byte>>?, size: size_t): ssize_t
 
-    return memScoped {
-        val (finalBuf, finalSize, ll) =
-            if (accepts.contains(fd.convert()) || connects.contains(fd.convert()))
-                processWriteEvent(fd.convert(), buf, size.convert())
-            else TcpFinalData(buf, size.convert())
-        (nativeWrite(fd.convert(), finalBuf, (finalSize).convert()) - ll).convert()
-    }
-}
+expect fun drillSend(fd: DRILL_SOCKET, buf: CPointer<ByteVarOf<Byte>>?, size: Int, flags: Int): Int
 
-
-internal fun drillSend(fd: DRILL_SOCKET, buf: CPointer<ByteVarOf<Byte>>?, size: Int, flags: Int): Int {
-    initRuntimeIfNeeded()
-    return memScoped {
-        val (finalBuf, finalSize, ll) = processWriteEvent(fd, buf, size.convert())
-        (nativeSend(fd.convert(), finalBuf, (finalSize).convert(), flags) - ll).convert()
-    }
-}
-
-internal fun drillRecv(fd: DRILL_SOCKET, buf: CPointer<ByteVarOf<Byte>>?, size: Int, flags: Int): Int {
-    initRuntimeIfNeeded()
-    val read = nativeRecv(fd, buf, size.convert(), flags)
-    tryDetectProtocol(fd, buf, read.convert())
-    return read.convert()
-}
+expect fun drillRecv(fd: DRILL_SOCKET, buf: CPointer<ByteVarOf<Byte>>?, size: Int, flags: Int): Int
 
 internal fun drillConnect(fd: DRILL_SOCKET, addr: CPointer<sockaddr>?, socklen: drill_sock_len): Int {
     initRuntimeIfNeeded()
@@ -118,25 +90,13 @@ internal fun drillConnect(fd: DRILL_SOCKET, addr: CPointer<sockaddr>?, socklen: 
     return connectStatus
 }
 
-internal fun drillAccept(
-    fd: DRILL_SOCKET,
-    addr: CPointer<sockaddr>?,
-    socklen: CPointer<drill_sock_lenVar>?
-): DRILL_SOCKET {
-    initRuntimeIfNeeded()
-    val socket = nativeAccept(fd, addr, socklen)
-    if (isValidSocket(socket) == 0)
-        _accepts.update { it + socket }
-    return socket
-}
-
-internal fun drillClose(fd: DRILL_SOCKET): Int {
+fun drillClose(fd: DRILL_SOCKET): Int {
     initRuntimeIfNeeded()
     val result = nativeClose(fd)
     if (result == 0) {
         _accepts.update { it - fd }
         _connects.update { it - fd }
-        close(fd)
+        com.epam.drill.hook.io.tcp.close(fd)
     }
     return result
 }

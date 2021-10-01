@@ -17,16 +17,17 @@ package com.epam.drill.hook.io
 
 import com.epam.drill.hook.gen.*
 
-val nativeConnect
-    get() = connect_func!!
+val nativeRead
+    get() = read_func!!
 
-val nativeClose
-    get() = close_func!!
+val nativeWrite
+    get() = write_func!!
 
+val nativeSend
+    get() = send_func!!
 
-@Suppress("NOTHING_TO_INLINE")
-inline fun Int.check(message: String) {
-    if(this < 0)
-        println("Hook operation '$message' failed")
-    return
-}
+val nativeRecv
+    get() = recv_func!!
+
+val nativeAccept
+    get() = accept_func!!
